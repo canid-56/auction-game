@@ -396,10 +396,41 @@ const GameMain = {
 const GamePayment = {
     data() {
         return {
-
+            sessionUrl:null
         }
     },
     props:["playerList","auctionAssginment","auctionItems","auctionLog","currentState","incrementCurrentState","decrementCurrentState","checkPayment","checkResult"],
+    computed:{
+        fileName() {
+            return "playdata.json" // 時刻とか何らかの識別子入れる
+        },
+        jsonData() {
+            jsonData = JSON.stringify({
+                playerList:this.playerList,
+                auctionAssginment:this.auctionAssginment,
+                auctionItems:this.auctionItems,
+                auctionLog:this.auctionLog,
+                result:this.checkResult()
+            })
+            return jsonData
+        }
+    },
+    methods:{
+        jasonify() {
+            jsonData = {
+                playerList:this.playerList,
+                auctionAssginment:this.auctionAssginment,
+                auctionItems:this.auctionItems,
+                auctionLog:this.auctionLog,
+                result:this.checkResult()
+            }
+            return jsonData
+        },
+        createDownloadUrl() {
+            blob = new Blob([this.jsonData], { type: 'application/json' })
+            this.sessionUrl = window.URL.createObjectURL(blob)
+        }
+    },
     template:/*html*/`
     <div id="payment"
     v-if="currentState == 4">
@@ -445,6 +476,8 @@ const GamePayment = {
                 </tr>
             </tbody>
         </table>
+        <a type="button" class="btn btn-info mt-3" id="dataDL"
+        :href="sessionUrl" :download="fileName" @click="createDownloadUrl">プレイデータをDL</a>
     </div>
     `
 }
