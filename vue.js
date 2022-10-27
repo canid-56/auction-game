@@ -302,8 +302,8 @@ const GameMain = {
         dropBid() {
             orderLength = this.stepTurn(this.itemId,this.auctionLog[this.itemId].order[this.orderId],this.tempBid,drop=true).orderLength
             this.turnId++
-            if (this.orderId >= orderLength-1) {
-                this.orderId = orderLength-1
+            if (this.orderId > orderLength-1) {
+                this.orderId = 0
             }
             // if (this.orderId < orderLength-1) {
             //     this.orderId++
@@ -609,6 +609,7 @@ const Game = {
             console.log(result)
         },
         resetGame() {
+            this.playerList=[]
             this.auctionItems=[]
             this.currentState=0
             this.auctionAssginment=[]
