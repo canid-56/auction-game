@@ -1,19 +1,44 @@
-var debug=false;
+var debug=true;
+// var debug=false;
 
 const minNumPlayer = 4;
 const maxNumPlayer = 10;
 const maxToken = 20;
 
+/**
+ * 一様分布に従う乱数を生成する関数
+ * @param {number} min - 下限
+ * @param {float} max - 上限
+ * @param {number} flooring - 整数丸めを行うかどうか
+ * @returns {number} 生成された乱数
+ */
 function randomRange(min=0, max=1,flooring=true){
-    return Math.floor(Math.random() * (max-min) + min)
+    res = Math.random() * (max-min) + min
+    if (flooring) {
+        res = Math.floor(res)        
+    }
+    return res
 }
 
+/**
+ * ランダムな数値区間を生成する関数
+ * @param {number} min - 下限
+ * @param {number} max - 上限
+ * @param {number} step - 解像度
+ * @param {number} flooring - 整数丸めを行うかどうか
+ * @returns {Object} - 生成されたランダムな数値区間, 'min' - 区間の最小値, 'max' - 区間の最大値
+ */
 function randomInterval(min=0, max=1, step=0.1,flooring=true) {
     intMin = randomRange(min,max-step,flooring=flooring)
     intMax = randomRange(intMin+step,max,flooring=flooring)
     return {min:intMin, max:intMax}
 }
 
+/**
+ * 配列をランダムに並べ替える関数
+ * @param {Array} array - シャッフル対象の配列
+ * @returns {Array} - ランダムに並べ替えられた配列
+ */
 function arrayShuffle(array) {
     for(var i = (array.length - 1); 0 < i; i--){
   
@@ -28,6 +53,12 @@ function arrayShuffle(array) {
     return array;
 }
 
+/**
+ * 循環する数値を1進める
+ * @param {number} id - 現在の数値
+ * @param {number} length - 取りうる数値の個数
+ * @returns {number} - 1進められた数値
+ */
 function rotateId(id,length) {
     if(id < length-1){
         return id+1
@@ -36,8 +67,14 @@ function rotateId(id,length) {
     }
 }
 
+/**
+ * Vueアプリ
+ */
 const app = Vue.createApp({});
 
+/**
+ * ゲームの設定を行うVueモデル
+ */
 const GameSetting = {
     data() {
         return {
@@ -147,6 +184,9 @@ const GameSetting = {
     `
 }
 
+/**
+ * プレイヤーにカードの記載内容を表示するVueモデル
+ */
 const CardCheck = {
     data() {
         return {
@@ -219,7 +259,7 @@ const CardCheck = {
                             <h2><u>{{ playerList[showingPlayer].name }} 様</u></h2>
                             <p class="card-text">以下の絵画を鑑定した結果、以下の値段の価値がある事を保証します。</p>    
                             <h4><u>絵画番号 {{ auctionAssginment[showingPlayer].appr }}</u></h4>
-                            <h4><u>鑑定額 {{ auctionItems[auctionAssginment[showingPlayer].sell].interval.min }} コイン<br/>から {{ auctionItems[auctionAssginment[showingPlayer].sell].interval.max }} コイン</u></h4>
+                            <h4><u>鑑定額 {{ auctionItems[auctionAssginment[showingPlayer].appr].interval.min }} コイン<br/>から {{ auctionItems[auctionAssginment[showingPlayer].appr].interval.max }} コイン</u></h4>
                         </div>
                     </div>
                 </div>
@@ -254,6 +294,9 @@ const CardCheck = {
     `
 }
 
+/**
+ * ゲームのメインルーチンのVueモデル
+ */
 const GameMain = {
     data() {
         return {
@@ -396,6 +439,9 @@ const GameMain = {
     `
 }
 
+/**
+ * ゲーム終了後の収支状況を表示するVueモデル
+ */
 const GamePayment = {
     data() {
         return {
@@ -485,6 +531,9 @@ const GamePayment = {
     `
 }
 
+/**
+ * ゲーム全体のVueモデル
+ */
 const Game = {
     data() {
         return {
@@ -681,6 +730,9 @@ const Game = {
 
 app.component('game', Game)
 
+/**
+ * ゲームアプリがマウントされたVueモデル
+ */
 const vm = app.mount('#app');
 
 // サンプルデータ
