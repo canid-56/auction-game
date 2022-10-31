@@ -1,5 +1,5 @@
 var debug=true;
-// var debug=false;
+var debug=false;
 
 const minNumPlayer = 4;
 const maxNumPlayer = 10;
